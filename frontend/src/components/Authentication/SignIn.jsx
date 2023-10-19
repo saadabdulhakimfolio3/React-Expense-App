@@ -51,8 +51,6 @@ export default function SignIn() {
           password: passwordRef.current.value,
         })
       );
-
-      
     }
   };
 
@@ -112,7 +110,15 @@ export default function SignIn() {
           error={passwordError}
         />
         <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
+          control={
+            <Checkbox
+              value="remember"
+              color="primary"
+              onChange={(event) =>
+                localStorage.setItem("remember-me", event.target.checked)
+              }
+            />
+          }
           label="Remember me"
         />
         <Button

@@ -39,13 +39,12 @@ export const registerUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk("auth/login", async (credentials) => {
   try {
-    console.log(credentials);
-
     const userCredential = await signInWithEmailAndPassword(
       auth,
       credentials.email,
       credentials.password
     );
+
     return userCredential.user;
   } catch (e) {
     console.log(e.message);
@@ -56,9 +55,8 @@ export const loginUser = createAsyncThunk("auth/login", async (credentials) => {
 export const updateUser = createAsyncThunk(
   "profile/update",
   async (credentials, { getState, dispatch }) => {
-    console.log(credentials);
     const user = getState().auth.currentUser;
-    console.log(user);
+
     try {
       var userCredential;
       if (credentials.displayName != "")
@@ -101,10 +99,18 @@ export const authSlice = createSlice({
       state.currentUser = null;
       state.status = "idle";
       state.error = null;
+      localStorage.setItem("remember-me", false);
+      const rememberMe = localStorage.getItem("remember-me");
+      console.log(rememberMe);
     },
     reset: (state, action) => {
       state.error = null;
       state.status = "idle";
+    },
+    setCurrentUser: (state, action) => {
+      state.error = null;
+      state.status = "idle";
+      state.currentUser = action.payload.currentUser;
     },
   },
   extraReducers(builder) {
@@ -145,6 +151,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { logout, reset } = authSlice.actions;
+export const { logout, reset, setCurrentUser } = authSlice.actions;
 
 export default authSlice.reducer;
