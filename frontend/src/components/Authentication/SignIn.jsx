@@ -27,6 +27,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRef, useState, useEffect } from "react";
 
 export default function SignIn() {
+  useEffect(() => {
+    localStorage.setItem("remember-me", false);
+  }, []);
+
   // Refs
   const emailRef = useRef("");
   const passwordRef = useRef("");

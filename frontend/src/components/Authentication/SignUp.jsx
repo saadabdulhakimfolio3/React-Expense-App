@@ -17,6 +17,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRef, useState, useEffect } from "react";
 
 export default function SignUp() {
+  useEffect(() => {
+    localStorage.setItem("remember-me", false);
+  }, []);
+
   // Refs
   const nameRef = useRef("");
   const emailRef = useRef("");
