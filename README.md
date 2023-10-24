@@ -10,9 +10,6 @@ a user-friendly interface for users to record, categorize, and analyze their exp
 - [Demo](#demo)
 - [Features](#features)
 - [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Demo
 
@@ -27,53 +24,45 @@ a user-friendly interface for users to record, categorize, and analyze their exp
 
 ### User Authentication
 
-#### User Registration: Users should be able to create an account by providing their
-email address and password.
+#### User Registration: Users can create an account by providing their email address and password.
 
-#### User Login: Registered users should be able to log in securely using their email
-and password.
+#### User Login: Registered users can log in securely using their email and password.
 
-#### Password Reset: Users should have the option to reset their password via email
-if they forget it.
 
 ### Expense Management
 
-Add Expenses: Users can manually add new expenses, specifying the date,
-amount, category, and a brief description.
+#### Add Expenses: Users can manually add new expenses, specifying the date, amount, category, and a brief description.
+
 
 #### Edit Expenses: Users can edit or delete previously entered expenses.
 
-#### Expense Categories: Users can categorize expenses into predefined categories
-(e.g., groceries, transportation, entertainment).
+#### Expense Categories: Users can categorize expenses into predefined categories (e.g., groceries, transportation, entertainment).
 
-#### Expense Filters: Users can filter and view expenses based on date range and
-categories.
 
-#### Expense Summary: Users can view a summary of their total expenses for a
-selected date range and see category-wise spending breakdown.
+#### Expense Filters: Users can filter and view expenses based on date range and categories.
+
+#### Expense Summary: Users can view a summary of their total expenses for a selected date range and see category-wise spending breakdown.
+
 
 ### Budget Tracking
 
-#### Set Budgets: Users can set monthly or weekly budgets for different expense
-categories.
+#### Set Budgets: Users can set monthly or weekly budgets for different expense categories.
 
-#### Budget Notifications: Users should receive notifications or alerts when they
-exceed their budget for a specific category.
+
+#### Budget Notifications: Users should receive notifications or alerts when their exceed their budget for a specific category.
+
 
 ### Reports and Analytics
 
-#### Expense Trends: Users can view graphical representations (e.g., charts) of their
-expense trends over time.
+#### Expense Trends: Users can view graphical representations (e.g., charts) of their expense trends over time.
 
-#### Income Tracking: Users can track their income and view their income versus
-expenses.
+#### Income Tracking: Users can track their income and view their income versus expenses.
 
 ### User Profile
 
-#### User Profile Page: Users can update their personal information, change their
-password, and manage their account settings.
+#### User Profile Page: Users can update their personal information, change their password, and manage their account settings.
 
-Logout: Users should be able to log out securely.
+#### Logout: Users can log out securely.
 
 ## Installation
 
