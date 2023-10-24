@@ -24,8 +24,7 @@ a user-friendly interface for users to record, categorize, and analyze their exp
 
 ### User Authentication
 
-#### User Registration: Users can create an account by providing their
-email address and password.
+#### User Registration: Users can create an account by providing their email address and password.
 
 #### User Login: Registered users can log in securely using their email and password.
 
