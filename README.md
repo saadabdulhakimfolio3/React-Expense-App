@@ -62,7 +62,7 @@ a user-friendly interface for users to record, categorize, and analyze their exp
 
 #### User Profile Page: Users can update their personal information, change their password, and manage their account settings.
 
-#### Logout: Users should be able to log out securely.
+#### Logout: Users can log out securely.
 
 ## Installation
 
