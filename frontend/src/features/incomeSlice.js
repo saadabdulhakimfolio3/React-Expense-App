@@ -61,15 +61,12 @@ export const getincomes = createAsyncThunk(
       }));
 
       const year = new Date().getFullYear();
-      console.log(year);
       result = result.filter((income) => {
         {
-          console.log(income.year);
           return income.uid == uid && income.year === year;
         }
       });
 
-      console.log(result);
       return result;
     } catch (e) {
       console.log(e.message);
