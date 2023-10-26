@@ -1,96 +1,88 @@
-import React, { useEffect } from "react";
+import React from "react";
 import AddExpenseForm from "./AddExpenseForm";
 import EnhancedTable from "./Table";
 import ExpensesSummary from "./ExpensesSummary";
 import IncomeVsExpenses from "./IncomeVsExpenses";
 import SetMonthlyForm from "./SetMonthlyForm";
-import { Box, Typography, Grid } from "@mui/material";
+import { Typography, Row, Col } from "antd";
 
 export default function Expenses() {
   return (
     <div>
-      <Typography variant="h4" sx={{ mt: "10vh", ml: "1vw" }}>
+      <Typography.Title
+        level={4}
+        style={{ marginTop: "10vh", marginLeft: "1vw" }}
+      >
         Expenses Dashboard
-      </Typography>
-      <Grid container spacing={2} sx={{ padding: 2 }}>
-        <Grid item xs={12}>
-          <Box
-            component="form"
-            noValidate
-            sx={{
+      </Typography.Title>
+      <Row gutter={16} style={{ padding: 16 }}>
+        <Col xs={24}>
+          <div
+            style={{
               backgroundColor: "white",
-              border: 1,
+              border: "1px solid #ccc",
               borderRadius: "16px",
-              padding: 2,
-              mt: "1vh",
+              padding: 16,
+              marginTop: "1vh",
             }}
           >
             <ExpensesSummary />
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <Box
-            component="form"
-            noValidate
-            sx={{
+          </div>
+        </Col>
+        <Col xs={24}>
+          <div
+            style={{
               backgroundColor: "white",
-              border: 1,
+              border: "1px solid #ccc",
               borderRadius: "16px",
-              padding: 2,
-              mt: "1vh",
+              padding: 16,
+              marginTop: "1vh",
             }}
           >
             <IncomeVsExpenses />
-          </Box>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Box
-            component="form"
-            noValidate
-            sx={{
+          </div>
+        </Col>
+        <Col xs={24} md={12}>
+          <div
+            style={{
               backgroundColor: "white",
-              border: 1,
+              border: "1px solid #ccc",
               borderRadius: "16px",
-              padding: 2,
-              mt: "2vh",
+              padding: 16,
+              marginTop: "2vh",
             }}
           >
             <AddExpenseForm />
-          </Box>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Box
-            component="form"
-            noValidate
-            sx={{
+          </div>
+        </Col>
+        <Col xs={24} md={12}>
+          <div
+            style={{
               backgroundColor: "white",
-              border: 1,
+              border: "1px solid #ccc",
               borderRadius: "16px",
-              padding: 2,
-              mt: "2vh",
+              padding: 16,
+              marginTop: "2vh",
             }}
           >
             <SetMonthlyForm />
-          </Box>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Box
-            component="form"
-            noValidate
-            sx={{
+          </div>
+        </Col>
+        <Col xs={24}>
+          <div
+            style={{
               backgroundColor: "white",
-              border: 1,
+              border: "1px solid #ccc",
               borderRadius: "16px",
-              padding: 2,
-              mt: "2vh",
-              mb: "2vh",
+              padding: 16,
+              marginTop: "2vh",
+              marginBottom: "2vh",
             }}
           >
             <EnhancedTable />
-          </Box>
-        </Grid>
-      </Grid>
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 }
