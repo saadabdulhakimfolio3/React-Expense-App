@@ -129,18 +129,17 @@ export default function Profile() {
   };
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "white",
-        border: 1,
-        padding: 10,
-        alignItems: "center",
-        flexDirection: "column",
-        display: "flex",
-        my: "15vh",
-        mx: "5vw",
-      }}
-    >
+    <div
+    style={{
+      backgroundColor: "white",
+      border: "1px solid #ccc",
+      borderRadius: "16px",
+      padding: 16,
+      marginTop: "2vh",
+      marginBottom: "2vh",
+      margin:10
+    }}
+  >
       <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
         <PersonIcon />
       </Avatar>
@@ -318,6 +317,6 @@ export default function Profile() {
           <></>
         )}
       </>
-    </Box>
+    </div>
   );
 }
