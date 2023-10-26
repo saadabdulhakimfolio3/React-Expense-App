@@ -7,19 +7,17 @@ import CategoryBudgets from "./CategoryBudgetsAndTotal";
 // MUI3
 import {
   Alert,
-  CircularProgress,
   Typography,
-  Box,
-  TextField,
+  Input,
   Button,
-  FormControl,
-  InputLabel,
+  Form,
   Select,
-  MenuItem,
-  Container,
-  Stack,
-  InputAdornment,
-} from "@mui/material";
+  DatePicker,
+  notification,
+} from "antd";
+import moment from "moment";
+const { Option } = Select;
+const { TextArea } = Input;
 
 // ReduxToolkit
 import { useSelector, useDispatch } from "react-redux";
@@ -27,10 +25,10 @@ import { addExpense, reset } from "../../features/expensesSlice";
 
 export default function AddExpenseForm() {
   // States
-  const amountRef = useRef();
-  const dateRef = useRef();
-  const descriptionRef = useRef();
-  const categoryRef = useRef();
+  const [amount, setAmount] = useState("");
+  const [date, setDate] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
 
   // Redux
   const status = useSelector((state) => state.expenses.addStatus);
@@ -47,25 +45,29 @@ export default function AddExpenseForm() {
 
   // Submit
   const handleSubmit = () => {
+    // console.log(date);
+    // console.log(category);
+    // console.log(description);
+    // console.log(amount);
     if (validationCheck()) {
       dispatch(
         addExpense({
           uid: currentUser.uid,
-          amount: amountRef.current.value,
-          date: dateRef.current.value,
-          description: descriptionRef.current.value,
-          category: categoryRef.current.value,
+          amount: amount,
+          date: date,
+          description: description,
+          category: category,
         })
       );
     }
   };
 
   useEffect(() => {
+    console.log(status);
     if (status == "succeded") {
-      amountRef.current.value = "";
-      // dateRef.current.value = null;
-      descriptionRef.current.value = "";
-
+      // setAmount("");
+      // // dateRef.target.value = null;
+      // setDescription("");
       setTimeout(() => {
         dispatch(reset());
       }, 5000);
@@ -79,24 +81,24 @@ export default function AddExpenseForm() {
     setCategoryError(false);
     var check = true;
 
-    if (amountRef.current.value == "") {
+    if (amount == "") {
       setAmountError(true);
       check = false;
     }
-    if (dateRef.current.value == "") {
+    if (date == "") {
       setDateError(true);
       check = false;
     }
-    if (descriptionRef.current.value == "") {
+    if (description == "") {
       setDescriptionError(true);
       check = false;
     }
     if (
-      categoryRef.current.value != "Transportation" &&
-      categoryRef.current.value != "Entertainment" &&
-      categoryRef.current.value != "Utilities" &&
-      categoryRef.current.value != "Other" &&
-      categoryRef.current.value != "Food"
+      category != "Transportation" &&
+      category != "Entertainment" &&
+      category != "Utilities" &&
+      category != "Other" &&
+      category != "Food"
     ) {
       setCategoryError(true);
       check = false;
@@ -104,105 +106,110 @@ export default function AddExpenseForm() {
 
     return check;
   };
-  const getCurrentDate = () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
+  };
+  const disabledDate = (target) => {
+    // The target parameter represents the date you are checking.
+    // If it's a valid date and it's greater than today, disable it.
+    return target && target > new Date();
   };
 
   return (
     <>
-      <Typography variant="h5">Add An Expense</Typography>
-      <Box sx={{ mt: "5px" }}>
-        {status == "failed" ? (
-          <Alert severity="error">{error}</Alert>
-        ) : status == "succeded" ? (
-          <Alert severity="success">Expense Added!</Alert>
-        ) : (
-          <></>
-        )}
-      </Box>
-      <Stack direction={"column"} sx={{ mt: "1px" }}>
-        <TextField
+      <Typography.Title level={5}>Add An Expense</Typography.Title>
+      {status === "failed" ? (
+        <Alert message={error} type="error" />
+      ) : status === "succeded" ? (
+        <Alert message="Expense Added!" type="success" />
+      ) : null}
+      <Form>
+        <Form.Item
           name="description"
           label="Description"
           required
-          disabled={status === "loading"}
-          inputRef={descriptionRef}
-          InputProps={{
-            startAdornment: <InputAdornment position="start"></InputAdornment>,
-          }}
-          inputProps={{ maxLength: 30 }}
-          error={descriptionError}
-          helperText={descriptionError ? "Please describe expense." : ""}
-          sx={{ mt: 1 }}
-        />
-      </Stack>
-      <Stack direction={"row"}>
-        <TextField
+          validateStatus={descriptionError ? "error" : ""}
+          help={descriptionError ? "Please describe expense." : ""}
+        >
+          <Input
+            disabled={status === "loading"}
+            maxLength={30}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+          />
+        </Form.Item>
+        <Form.Item
           name="amount"
           label="Amount"
-          type="number"
           required
-          inputRef={amountRef}
-          disabled={status === "loading"}
-          InputProps={{
-            startAdornment: <InputAdornment position="start">$</InputAdornment>,
-          }}
-          error={amountError}
-          helperText={amountError ? "Please specify amount." : ""}
-          sx={{ mt: 5 }}
-        />
-        <TextField
-          name="date"
-          type="date"
-          label="Date"
-          inputRef={dateRef}
-          disabled={status === "loading"}
-          defaultValue={getCurrentDate()}
-          required
-          InputProps={{
-            startAdornment: <InputAdornment position="start"></InputAdornment>,
-          }}
-          inputProps={{
-            max: new Date().toISOString().split("T")[0], // Set the maximum allowed date
-          }}
-          error={dateError}
-          helperText={dateError ? "Please specify date." : ""}
-          sx={{ mt: 5 }}
-        />
-        <TextField
-          label="Category"
-          select
-          required
-          f
-          disabled={status === "loading"}
-          inputRef={categoryRef}
-          error={categoryError}
-          helperText={categoryError ? "Please specify category." : ""}
-          sx={{ mt: 5, width: 200 }}
+          validateStatus={amountError ? "error" : ""}
+          help={amountError ? "Please specify amount." : ""}
         >
-          {/* Each menu item is an option. */}
-          <MenuItem value="Food">Food</MenuItem>
-          <MenuItem value="Transportation">Transportation</MenuItem>
-          <MenuItem value="Utilities">Utilities</MenuItem>
-          <MenuItem value="Entertainment">Entertainment</MenuItem>
-          <MenuItem value="Other">Other</MenuItem>
-        </TextField>
-      </Stack>
-      <Stack direction={"column"} sx={{ mt: "4%" }}>
-        <Box sx={{ mt: 1, display: "flex", justifyContent: "flex-end" }}>
-          {status == "loading" ? (
-            <CircularProgress size={"2rem"} />
-          ) : (
-            <Button onClick={handleSubmit} variant="contained" color="primary">
-              Add Expense
-            </Button>
-          )}
-        </Box>
-      </Stack>
+          <Input
+            type="number"
+            disabled={status === "loading"}
+            value={amount}
+            onChange={(e) => {
+              setAmount(e.target.value);
+            }}
+            prefix="$"
+          />
+        </Form.Item>
+        <Form.Item
+          name="date"
+          label="Date"
+          required
+          validateStatus={dateError ? "error" : ""}
+          help={dateError ? "Please specify date." : ""}
+        >
+          <DatePicker
+            disabled={status === "loading"}
+            format="YYYY-MM-DD"
+            disabledDate={disabledDate}
+            value={date}
+            onChange={(e) => {
+              setDate(moment(e).format("YYYY-MM-DD"));
+            }}
+          />
+        </Form.Item>
+        <Form.Item
+          name="category"
+          label="Category"
+          required
+          validateStatus={categoryError ? "error" : ""}
+          help={categoryError ? "Please specify category." : ""}
+        >
+          <Select
+            disabled={status === "loading"}
+            style={{ width: 200 }}
+            value={category}
+            onChange={(e) => {
+              console.log(e);
+              setCategory(e);
+            }}
+          >
+            <Option value="Food">Food</Option>
+            <Option value="Transportation">Transportation</Option>
+            <Option value="Utilities">Utilities</Option>
+            <Option value="Entertainment">Entertainment</Option>
+            <Option value="Other">Other</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item>
+          <Button
+            type="primary"
+            onClick={handleSubmit}
+            loading={status === "loading"}
+          >
+            Add Expense
+          </Button>
+        </Form.Item>
+      </Form>
     </>
   );
 }

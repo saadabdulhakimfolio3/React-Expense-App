@@ -1,26 +1,16 @@
-import React from "react";
-import { useRef } from "react";
+import React, { useRef } from "react";
+import { Typography, Row, Col, Input, Button, Spin, Select } from "antd";
+import { useSelector } from "react-redux";
 import {
-  Typography,
-  Box,
-  TextField,
-  Button,
-  FormControl,
-  InputLabel,
-  CircularProgress,
-  Select,
-  MenuItem,
-  Container,
-  Stack,
-  InputAdornment,
-  Grid, // Import Grid component from Material-UI
-} from "@mui/material";
-
-import { useSelector, useDispatch} from "react-redux";
-
-import { PieChart, BarChart, ScatterChart } from "@mui/x-charts";
+  PieChartOutlined,
+  BarChartOutlined,
+  DotChartOutlined,
+} from "@ant-design/icons";
 import ExpensesBreakdown from "./ExpensesBreakdown";
 import CategoryBudgetsAndTotal from "./CategoryBudgetsAndTotal";
+
+const { Text } = Typography;
+const { Option } = Select;
 
 export default function ExpensesSummary() {
   // States
@@ -31,22 +21,25 @@ export default function ExpensesSummary() {
 
   // Redux
   const getStatus = useSelector((state) => state.expenses.getStatus);
+
   return (
     <>
-      {getStatus == "loading" ? (
-        <CircularProgress></CircularProgress>
+      {getStatus === "loading" ? (
+        <Spin size="large" />
       ) : (
-        <Container>
-          <Typography variant="h5">Month's Summary</Typography>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
+        <div style={{ padding: "20px" }}>
+          <Typography.Title type="primary" level={2}>
+            Month's Summary
+          </Typography.Title>
+          <Row gutter={[16, 16]} style={{ marginTop: "10px" }}>
+            <Col xs={24} sm={12}>
               <ExpensesBreakdown />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Col>
+            <Col xs={24} sm={12}>
               <CategoryBudgetsAndTotal />
-            </Grid>
-          </Grid>
-        </Container>
+            </Col>
+          </Row>
+        </div>
       )}
     </>
   );

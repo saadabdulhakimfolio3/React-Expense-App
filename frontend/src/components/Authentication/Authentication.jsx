@@ -39,7 +39,7 @@ export default function Authentication() {
             style={{
               position: "absolute",
               bottom: 0,
-              left: 0,  
+              left: 0,
               padding: "16px",
               color: "#fff",
               background: "rgba(0, 0, 0, 0.5)",
@@ -76,7 +76,7 @@ export default function Authentication() {
               <></>
             )}
             {status === "loading" ? (
-              <Spin />
+              <Spin size="large" />
             ) : (
               <Routes>
                 <Route path="/signup" element={<SignUp />} />

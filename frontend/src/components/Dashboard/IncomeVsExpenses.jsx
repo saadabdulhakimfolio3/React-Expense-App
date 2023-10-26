@@ -3,27 +3,15 @@ import React, { useEffect, useState } from "react";
 // MUI
 import {
   Typography,
-  Box,
-  TextField,
+  Input,
   Button,
-  FormControl,
-  InputLabel,
   Select,
-  MenuItem,
-  CircularProgress,
-  Container,
-  Stack,
-  InputAdornment,
-  Grid, // Import Grid component from Material-UI
-} from "@mui/material";
-
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
+  Table,
+  Space,
+  Row,
+  Col,
+  Spin,
+} from "antd";
 import { LineChart } from "@mui/x-charts";
 
 // Redux Toolkit
@@ -121,15 +109,15 @@ export default function IncomeVsExpenses() {
 
   return (
     <>
-      {getStatus == "loading" ? (
-        <CircularProgress></CircularProgress>
+      {getStatus === "loading" ? (
+        <Spin size="large" />
       ) : (
-        <Container>
-          <Typography variant="h5">
+        <>
+          <Typography.Title level={2}>
             {new Date().getFullYear()} Income vs Expenses
-          </Typography>
-          <Grid container spacing={6}>
-            <Grid item xs={12} sm={6}>
+          </Typography.Title>
+          <Row gutter={16}>
+            <Col span={12} style={{ marginTop: 20 }}>
               <LineChart
                 xAxis={[
                   {
@@ -150,56 +138,28 @@ export default function IncomeVsExpenses() {
                 width={500}
                 height={300}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TableContainer>
-                <Table size="small" aria-labelledby="tableTitle">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="left">Month</TableCell>
-                      <TableCell align="left">Income</TableCell>
-                      <TableCell align="left">Total Expense</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {months.map((month, index) => {
-                      // var status = getStatus(
-                      //   categoryTotals[budget.category]
-                      //     ? categoryTotals[budget.category]
-                      //     : 0,
-                      //   budget.budget
-                      // );
-                      return (
-                        <TableRow>
-                          <TableCell align="left">{month}</TableCell>
-                          <TableCell align="left">
-                            {incomesState[index]}
-                          </TableCell>
-                          <TableCell align="left">
-                            {expensesMonth[index]}
-                          </TableCell>
-                          {/* <TableCell align="left">
-                        {status == "success" ? (
-                          <Alert severity={"success"}>Budget is safe.</Alert>
-                        ) : status == "warning" ? (
-                          <Alert severity={"warning"}>
-                            Budget is close to being exceeded!
-                          </Alert>
-                        ) : (
-                          <Alert severity={"error"}>
-                            Budget has been exceeded!
-                          </Alert>
-                        )}
-                      </TableCell> */}
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
-          </Grid>
-        </Container>
+            </Col>
+            <Col span={12}>
+              <Table
+                pagination={{ pageSize: 6 }}
+                dataSource={months.map((month, index) => ({
+                  key: index,
+                  month,
+                  income: incomesState[index],
+                  totalExpense: expensesMonth[index],
+                }))}
+              >
+                <Table.Column title="Month" dataIndex="month" key="month" />
+                <Table.Column title="Income" dataIndex="income" key="income" />
+                <Table.Column
+                  title="Total Expense"
+                  dataIndex="totalExpense"
+                  key="totalExpense"
+                />
+              </Table>
+            </Col>
+          </Row>
+        </>
       )}
     </>
   );

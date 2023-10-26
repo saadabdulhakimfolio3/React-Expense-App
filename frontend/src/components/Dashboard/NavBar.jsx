@@ -1,26 +1,19 @@
 import React, { useState } from "react";
+import { Button, Layout, Menu, Typography, Space, Avatar } from "antd";
 import {
-  Button,
-  AppBar,
-  CssBaseline,
-  Drawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-  Typography,
-  IconButton,
-  Stack,
-} from "@mui/material";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import PersonIcon from "@mui/icons-material/Person";
-import MenuIcon from "@mui/icons-material/Menu";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+  MenuOutlined,
+  DashboardOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+const { Header, Sider, Content } = Layout;
+
+import Profile from "../Authentication/Profile";
+import Expenses from "./Expenses";
 
 // React-Router-Dom
 import {
   BrowserRouter as Router,
+  Routes,
   Route,
   Link,
   useNavigate,
@@ -34,11 +27,9 @@ import { reset as resetIncome } from "../../features/incomeSlice";
 import { reset as resetBudget } from "../../features/budgetSlice";
 import { useSelector, useDispatch } from "react-redux";
 
-const defaultTheme = createTheme();
-
 export default function NavBar() {
   // States
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -60,67 +51,66 @@ export default function NavBar() {
   }
 
   return (
-    <div style={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed">
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={toggleDrawer} // Added onClick to open the drawer
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Expense Tracker
-          </Typography>
-          <div style={{ flexGrow: 1 }}></div>
-          <Stack direction={"row"} spacing={2}>
-            <Typography variant="h5">{currentUser.displayName}</Typography>
+    <Layout style={{ minHeight: "100vh" }}>
+      <Sider
+        collapsible
+        collapsed={open}
+        onCollapse={() => setOpen(!open)}
+        style={{
+          position: "fixed",
+          height: "100vh", // Set the sidebar to full viewport height
+        }}
+      >
+        <div className="logo" />
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+          <Menu.Item key="1" icon={<DashboardOutlined />}>
+            <Link to="/home">Dashboard</Link>
+          </Menu.Item>
+          <Menu.Item key="2" icon={<UserOutlined />}>
+            <Link to="/profile">Profile</Link>
+          </Menu.Item>
+        </Menu>
+      </Sider>
+      <Layout
+        className="site-layout"
+        style={{ marginLeft: open ? 80 : 200, overflow: "hidden" }}
+      >
+        <Header
+          className="site-layout-background"
+          style={{
+            padding: 0,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Space align="center">
+            <Typography.Title level={4} style={{ margin: 0, color: "white" }}>
+              Expense Tracker
+            </Typography.Title>
+          </Space>
+
+          <Space>
+            <UserOutlined style={{ fontSize: 24, color: "white" }} />
+            <Typography.Text strong style={{ margin: 0, color: "white" }}>
+              {currentUser.displayName}
+            </Typography.Text>
             <Button
-              variant="contained"
-              color="secondary"
+              type="primary"
               onClick={handleSignOut}
+              style={{ margin: 0, color: "white" }}
             >
               Sign Out
             </Button>
-          </Stack>
-        </Toolbar>
-      </AppBar>
-      <Drawer open={open} onClose={toggleDrawer}>
-        <div
-          style={{
-            width: 240,
-          }}
-          onClick={toggleDrawer}
-          onKeyDown={toggleDrawer}
-        >
-          <List>
-            <ListItem>
-              <Button
-                startIcon={<DashboardIcon />}
-                variant="text"
-                component={Link}
-                to="/home"
-              >
-                Dashboard
-              </Button>
-            </ListItem>
-            <ListItem>
-              <Button
-                startIcon={<PersonIcon />}
-                variant="text"
-                component={Link}
-                to="/profile"
-              >
-                Profile
-              </Button>
-            </ListItem>
-          </List>
-        </div>
-      </Drawer>
-    </div>
+          </Space>
+        </Header>
+        <Content>
+          <Routes>
+            <Route path="/home" element={<Expenses />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="*" element={<Expenses />} />
+          </Routes>
+        </Content>
+      </Layout>
+    </Layout>
   );
 }

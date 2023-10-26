@@ -1,30 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {
-  Alert,
-  Typography,
-  Box,
-  TextField,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Container,
-  Stack,
-  InputAdornment,
-  CircularProgress,
-} from "@mui/material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
+import { Table, Spin, Alert } from "antd";
+
 import { useSelector, useDispatch } from "react-redux";
 import { getBudgets } from "../../features/budgetSlice";
 
 export default function CategoryBudgetsAndTotal() {
+  // React-Redux
   const budgets = useSelector((state) => state.budget.budgets);
   const expenses = useSelector((state) => state.expenses.unfilteredList);
   const getExpensesStatus = useSelector((state) => state.expenses.getStatus);
@@ -34,8 +15,10 @@ export default function CategoryBudgetsAndTotal() {
   const currentUser = useSelector((state) => state.auth.currentUser);
   const dispatch = useDispatch();
 
+  // States
   const [categoryTotals, setCategoryTotals] = useState({});
 
+  // Use Effects
   useEffect(() => {
     dispatch(getBudgets(currentUser.uid));
   }, [addBudgetStatus]);
@@ -85,59 +68,58 @@ export default function CategoryBudgetsAndTotal() {
   };
 
   return (
-    <>
-      <TableContainer>
-        <Table size="small" aria-labelledby="tableTitle">
-          {getExpensesStatus == "loading" ? (
-            <CircularProgress></CircularProgress>
-          ) : (
-            <>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left">Category</TableCell>
-                  <TableCell align="left">Month's Budget</TableCell>
-                  <TableCell align="left">Month's Expense</TableCell>
-                  <TableCell align="left">Month's Status</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {budgets.map((budget) => {
-                  var status = getStatus(
-                    categoryTotals[budget.category]
-                      ? categoryTotals[budget.category]
-                      : 0,
-                    budget.budget
-                  );
-                  return (
-                    <TableRow key={budget.category}>
-                      <TableCell align="left">{budget.category}</TableCell>
-                      <TableCell align="left">{budget.budget}</TableCell>
-                      <TableCell align="left">
-                        {categoryTotals[budget.category]
-                          ? categoryTotals[budget.category]
-                          : 0}
-                      </TableCell>
-                      <TableCell align="left">
-                        {status == "success" ? (
-                          <Alert severity={"success"}>Budget is safe.</Alert>
-                        ) : status == "warning" ? (
-                          <Alert severity={"warning"}>
-                            Budget is close to being exceeded!
-                          </Alert>
-                        ) : (
-                          <Alert severity={"error"}>
-                            Budget has been exceeded!
-                          </Alert>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </>
-          )}
-        </Table>
-      </TableContainer>
-    </>
+    <Table
+      pagination={false}
+      dataSource={budgets}
+      loading={getExpensesStatus === "loading"}
+      columns={[
+        {
+          title: "Category",
+          dataIndex: "category",
+          key: "category",
+        },
+        {
+          title: "Month's Budget",
+          dataIndex: "budget",
+          key: "budget",
+        },
+        {
+          title: "Month's Expense",
+          dataIndex: "category",
+          key: "category",
+          render: (category) => categoryTotals[category] || 0,
+        },
+        {
+          title: "Month's Status",
+          dataIndex: "category",
+          key: "category",
+          render: (category) => {
+            const budget = budgets.find((b) => b.category === category);
+            const status = getStatus(
+              categoryTotals[category] || 0,
+              budget.budget
+            );
+            return (
+              <Alert
+                type={
+                  status === "success"
+                    ? "success"
+                    : status === "warning"
+                    ? "warning"
+                    : "error"
+                }
+                message={
+                  status === "success"
+                    ? "Budget is Safe!"
+                    : status === "warning"
+                    ? "Budget is close to being exceeded!"
+                    : "Budget Exceeded!"
+                }
+              ></Alert>
+            );
+          },
+        },
+      ]}
+    />
   );
 }

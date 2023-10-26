@@ -43,7 +43,7 @@ function App() {
         dispatch(setCurrentUser({ currentUser: null }));
       }
     });
-    setLoadingUser(false);
+    setLoadingUser(false) ;
     return unsubscribe;
   }, []);
 
